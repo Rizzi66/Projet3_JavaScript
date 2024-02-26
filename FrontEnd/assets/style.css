@@ -48,10 +48,12 @@ table {
 }
 /** end reset css**/
 body {
-	max-width: 1140px;
-	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+}
+.size-container {
+	max-width: 1140px;
+	margin:auto;
 }
 header {
 	display: flex;
@@ -95,15 +97,12 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover, a:hover {
+li:hover {
 	color: #B1663C;
 }
 
 a {
 	text-decoration: none;
-}
-a:visited {
-	color: black;
 }
 
 #introduction {
@@ -131,13 +130,12 @@ a:visited {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
 }
-#filtre {
+.filtre {
 	display: flex;
 	justify-content: center;
 }
-#filtre button {
+.filtre button {
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 16px;
@@ -151,7 +149,7 @@ a:visited {
 	background-color: #FFFFFF;
 	min-width: 100px;
 }
-#filtre button:hover {
+.filtre button:hover {
 	background-color: #1D6154;
 	color: #FFFFFF;
 }
@@ -171,6 +169,11 @@ a:visited {
 	width: 50%;
 	margin: auto;
 }
+
+#login {
+	margin-top: 100px;
+}
+
 #contact > *, #login > * {
 	text-align: center;
 
@@ -208,7 +211,15 @@ input[type="submit"]{
 	text-align: center;
 	border-radius: 60px ;
 }
+#erreur {
+	color: red;
+	margin-top: 40px;
+	text-align: center;
+
+}
 #forgotPassword{
+	text-decoration: underline;
+	text-align: center;
 }
 
 footer nav ul {
@@ -217,3 +228,40 @@ footer nav ul {
 	margin: 2em
 }
 
+.bandeau {
+	display: flex;
+	background-color: black;
+	height: 59px;
+	color: white;
+	font-size: 16px;
+	font-weight: 400;
+	align-items: center;
+	justify-content: center;
+}
+
+.bandeau svg {
+	margin-right: 10px;
+}
+
+.hidden {
+	display: none;
+}
+
+#titreProjets {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 30px;
+}
+
+.titreProjets {
+	position: relative;
+	left: 54.5px;
+	padding-bottom: 20px;
+}
+
+
+
+#modifProjets {
+	margin-left: 31px;
+}
