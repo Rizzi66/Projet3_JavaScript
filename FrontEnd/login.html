@@ -8,8 +8,8 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
-	<link rel="stylesheet" href="./assets/style.css">
-	<script type="module" src="./assets/login.js" defer></script>
+	<link rel="stylesheet" href="./assets/css/style.css">
+	<script type="module" src="./assets/js/login.js" defer></script>
 </head>
 <body>
 	<div class="size-container">
@@ -25,17 +25,17 @@
 			</nav>
 		</header>
 		<main>
-			<section id="login">
+			<section id="login" class="login">
 				<h2>Log In</h2>
 				<form action="#" method="post">
 					<label for="email">E-mail</label>
 					<input type="email" name="email" id="email">
 					<label for="password">Mot de passe</label>
 					<input type="password" name="password" id="password">
-					<div id="erreur"></div>
+					<div class="erreur"></div>
 					<input type="submit" value="Se connecter">
-					<a id="forgotPassword">Mot de passe oublié</a>
 				</form>
+				<p class="forgotPassword">Mot de passe oublié</p>
 			</section>
 		</main>
 		<footer>
