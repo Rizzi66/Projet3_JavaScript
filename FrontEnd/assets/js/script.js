@@ -132,9 +132,9 @@ function affichageModule() {
             </div>
         </div>
         <form action="#" method="post" class="popupContainer_form">
-            <div class="popupForm_Ajoutphoto">
+            <div class="popupForm_Ajoutphoto" id="ajoutPhoto">
                 <i class="fa-regular fa-image fa-5x"></i>
-                <button>+ Ajouter photo</button>
+                <input type="button" value="+ Ajouter photo"></input>
                 <p>jpg, png : 4mo max</p>
             </div>
             <label for="titre">Titre</label>
@@ -173,24 +173,21 @@ function affichageModule() {
         // Fermeture du PopUp avec la croix
         popupFermeture.addEventListener("click", function () {
             MasquageModule()
-            console.log("1")
         })
         // Fermeture du PopUp en cliquant en dehors du PopUp
         popup.addEventListener("click", function (event) {
             if (event.target.id === "popup") {
                 MasquageModule()
-                console.log("2")
+                console.log("test")
             }
         })
         // Ouverture de la deuxième partie du PopUp
         popupValidation.addEventListener("click", function () {
             AffichageAjoutPhoto(popupRetour, popupTitre, popupContent, popupForm)
-            console.log("3")
         })
         // Retour à la première partie du PopUp
         popupRetour.addEventListener("click", function () {
             MasquageAjoutPhoto(popupRetour, popupTitre, popupContent, popupForm)
-            console.log("4")
         })
 }
 
@@ -206,6 +203,16 @@ function AffichageAjoutPhoto(popupRetour, popupTitre, popupContent, popupForm) {
     popupTitre.innerText = "Ajout photo"
     popupContent.classList.add("inactive")
     popupForm.classList.remove("inactive")
+
+    // Déclaration des différents éléments
+    const form = document.querySelector("form")
+    const boutonAjoutPhoto = document.querySelector(".popupForm_Ajoutphoto input")
+
+    // Ajouts des EventListeners
+        // Choix d'une image
+        boutonAjoutPhoto.addEventListener("click", function (event) {
+            event.preventDefault();
+        })
 }
 
 // Retour à la première partie du PopUp
