@@ -1,8 +1,11 @@
+/* Modules */
+@import '/FrontEnd/assets/css/formulaires.css';
+@import '/FrontEnd/assets/css/popup.css';
+
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -23,75 +26,96 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 body {
 	line-height: 1;
 }
+
 ol, ul {
 	list-style: none;
 }
+
 blockquote, q {
 	quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
 /** end reset css**/
 body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	background-color: #FFFEF8;
 }
+
 .size-container {
 	max-width: 1140px;
 	margin:auto;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
-}
-section {
-	margin: 50px 0
+	margin: 50px 0;
 }
 
-h1{
+footer {
+	background-color: #FFF;
+}
+
+footer nav ul {
+	display: flex;
+	justify-content: flex-end;
+	margin: 2em
+}
+
+section {
+	margin: 50px 0;
+}
+
+h1 {
 	display: flex;
 	flex-direction: column;
 	font-family: 'Syne';
 	font-size: 22px;
 	font-weight: 800;
-	color: #B1663C
+	color: #B1663C;
 }
 
 h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
 
-h2{
+h2 {
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
 	color: #1D6154;
 }
+
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
+
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
@@ -109,9 +133,11 @@ a {
 	display: flex;
 	align-items: center;
 }
+
 #introduction figure {
-	flex: 1
+	flex: 1;
 }
+
 #introduction img {
 	display: block;
 	margin: auto;
@@ -119,8 +145,9 @@ a {
 }
 
 #introduction article {
-	flex: 1
+	flex: 1;
 }
+
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -128,123 +155,9 @@ a {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
 #portfolio h2 {
 	text-align: center;
-}
-.filtre {
-	display: flex;
-	justify-content: center;
-}
-.filtre button {
-	font-family: 'Syne';
-	font-weight: 700;
-	font-size: 16px;
-	color: #1D6154;
-	border: solid 1px #1D6154;
-	border-radius: 60px;
-	padding: 8px;
-	margin-top: 21px;
-	margin-bottom: 51px;
-	margin-right: 10px;
-	background-color: #FFFFFF;
-	min-width: 100px;
-}
-.filtre button:hover {
-	background-color: #1D6154;
-	color: #FFFFFF;
-}
-.gallery {
-	width: 100%;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 20px;
-	grid-row-gap: 20px;
-}
-
-.gallery img {
-	width: 100%;
-
-}
-#contact, #login {
-	width: 50%;
-	margin: auto;
-}
-
-#login {
-	margin-top: 100px;
-}
-
-#contact > *, #login > * {
-	text-align: center;
-
-}
-#contact h2{
-	margin-bottom: 20px;
-}
-#contact form, #login form {
-	text-align: left;
-	display: flex;
-	flex-direction: column;
-}
-
-#contact input, #login input {
-	height: 50px;
-	font-size: 1.2em;
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-}
-#contact label, #login label {
-	margin: 38px 0 7px 0;
-}
-#contact textarea {
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-}
-
-input[type="submit"]{
-	font-family: 'Syne';
-	font-weight: 700;
-	color: white;
-	background-color: #1D6154;
-	margin : 40px auto ;
-	width: 180px;
-	text-align: center;
-	border-radius: 60px ;
-}
-#erreur {
-	color: red;
-	margin-top: 40px;
-	text-align: center;
-
-}
-#forgotPassword{
-	text-decoration: underline;
-	text-align: center;
-}
-
-footer nav ul {
-	display: flex;
-	justify-content: flex-end;
-	margin: 2em
-}
-
-.bandeau {
-	display: flex;
-	background-color: black;
-	height: 59px;
-	color: white;
-	font-size: 16px;
-	font-weight: 400;
-	align-items: center;
-	justify-content: center;
-}
-
-.bandeau svg {
-	margin-right: 10px;
-}
-
-.hidden {
-	display: none;
 }
 
 #titreProjets {
@@ -254,14 +167,76 @@ footer nav ul {
 	margin-bottom: 30px;
 }
 
-.titreProjets {
-	position: relative;
-	left: 54.5px;
-	padding-bottom: 20px;
-}
+/* Boutons des filtre */
+	.filtre {
+		display: flex;
+		justify-content: center;
+	}
 
+	.filtre button {
+		font-family: 'Syne';
+		font-weight: 700;
+		font-size: 16px;
+		color: #1D6154;
+		border: solid 1px #1D6154;
+		border-radius: 60px;
+		padding: 8px;
+		margin: 21px 10px 51px 0;
+		background-color: #FFFEF8;
+		min-width: 100px;
+	}
 
+	.filtre button:hover {
+		background-color: #1D6154;
+		color: #FFFFFF;
+	}
 
-#modifProjets {
-	margin-left: 31px;
-}
+/* Galerie d'images */
+	.gallery {
+		width: 100%;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-column-gap: 20px;
+		grid-row-gap: 20px;
+	}
+
+	.gallery img {
+		width: 100%;
+	}
+
+/* Modification après login */
+	/* Bandeau noir */
+		.bandeau {
+			display: flex;
+			background-color: black;
+			height: 59px;
+			color: white;
+			font-size: 16px;
+			font-weight: 400;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.bandeau i {
+			margin-right: 10px;
+		}
+
+	/* Bouton modifier */
+		.titreProjets {
+			position: relative;
+			left: 53px;
+			padding-bottom: 20px;
+		}
+
+		#modifProjets {
+			margin-left: 31px;
+		}
+
+/* Règle CSS pour afficher ou masquer un élément */
+	.active {
+		display: flex;
+	}
+
+	.inactive {
+		display: none;
+	}

@@ -1,0 +1,124 @@
+/* Général */
+    .popup {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.30);
+    }
+
+    .popupContainer {
+        background-color: #FFF;
+        border-radius: 10px;
+    }
+
+/* Bouton de contrôle (fermeture et retour) */
+    .popupContainer_boutons {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        margin: 26px 30px 10px 30px;
+    }
+
+    .popupContainer_boutons i{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+    }
+
+/* Titre */
+    .popupContainer_titre {
+        text-align: center;
+        font-family: "Work Sans";
+        font-size: 26px;
+    }
+
+/* Container principal */
+    .popupContainer_content, .popupContainer_form {
+        width: 420px;
+        margin: 0 105px;
+    }	
+
+    .popupContainer_validation {
+        display: flex;
+        justify-content: center;
+        border-top: 1px solid #B3B3B3;
+        padding: 38px 90px 45px;
+    }
+
+    /* Première page du PopUp (Galerie photo) */
+        .popupContainer_images {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 46px 0 38px;
+        }
+
+        .popupContainer_images div {
+            width: 18.3%;
+            position: relative;
+            padding-bottom: 29px;
+        }
+
+        .popupContainer_images img {
+            width: 100%;
+        }
+
+        .popupContainer_images i {
+            color: white;
+            background-color: black;
+            padding: 8px 4px;
+            border-radius: 2px;
+            position: absolute;
+            top: 6px;
+            right: 6px;
+        }
+
+    /* Deuxième page du PopUp (Ajout photo) */
+        .popupForm_Ajoutphoto {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            background-color: #E8F1F6;
+            border-radius: 3px;
+            margin: 30px 0 10px;
+            padding: 0 123px;
+        }
+
+        .popupForm_Ajoutphoto i {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 76px;
+            height: 76px;
+            color: #B9C5CC;
+            margin: 13px 0 6px;
+        }
+
+        .popupForm_Ajoutphoto button {
+            width: 100%;
+            font-family: "Work Sans";
+            font-size: 14px;
+            font-weight: 500;
+            color: #306685;
+            background-color: #CBD6DC;
+            padding: 10px 33px;
+            margin-bottom: 7px;
+            border: 0;
+            border-radius: 50px;
+        }
+
+        .popupForm_Ajoutphoto p {
+            font-size: 10px;
+            margin-bottom: 19px;
+        }
+        
+        #categories {
+            margin-bottom: 47px;
+        }
