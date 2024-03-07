@@ -83,15 +83,20 @@
     /* Deuxième page du PopUp (Ajout photo) */
         .popupForm_Ajoutphoto {
             display: flex;
-            align-items: center;
-            flex-direction: column;
+            justify-content: center;
             background-color: #E8F1F6;
             border-radius: 3px;
             margin: 30px 0 10px;
-            padding: 0 123px;
+            height: 165px;
         }
 
-        .popupForm_Ajoutphoto i {
+        .ajoutPhoto_container {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .ajoutPhoto_container i {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -101,24 +106,32 @@
             margin: 13px 0 6px;
         }
 
-        .popupForm_Ajoutphoto input {
-            width: 100%;
-            height: 100%;
-            box-shadow: none;
+        .ajoutPhoto_container label {
             font-family: "Work Sans";
             font-size: 14px;
             font-weight: 500;
             color: #306685;
             background-color: #CBD6DC;
             padding: 10px 33px;
-            margin-bottom: 7px;
+            margin: 0 0 7px;
             border: 0;
             border-radius: 50px;
+            cursor: pointer;
         }
 
-        .popupForm_Ajoutphoto p {
+        .ajoutPhoto_container input {
+            display: none;
+        }
+
+        .ajoutPhoto_container p {
             font-size: 10px;
             margin-bottom: 19px;
+        }
+
+        .popupForm_Ajoutphoto img {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
         }
 
         #categories {

@@ -89,6 +89,7 @@
         text-align: center;
         border-radius: 60px;
         border: 0;
+        cursor: pointer;
     }
 
     .bouton, .popupContainer_validation input {

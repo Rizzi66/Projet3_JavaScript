@@ -132,10 +132,14 @@ function affichageModule() {
             </div>
         </div>
         <form action="#" method="post" class="popupContainer_form">
-            <div class="popupForm_Ajoutphoto" id="ajoutPhoto">
-                <i class="fa-regular fa-image fa-5x"></i>
-                <input type="button" value="+ Ajouter photo"></input>
-                <p>jpg, png : 4mo max</p>
+            <div class="popupForm_Ajoutphoto">
+                <div class="ajoutPhoto_container">
+                    <i class="fa-regular fa-image fa-5x"></i>
+                    <label for="file">+ Ajouter photo</label>
+                    <input type="file" name="file" id="file" accept="image/png, image/jpeg">
+                    <p>jpg, png : 4mo max</p>
+                </div>
+                <img class="popupForm_Image inactive" src="" alt="Prévisualisation de l'image…"/>
             </div>
             <label for="titre">Titre</label>
             <input type="titre" name="titre" id="titre">
@@ -207,12 +211,28 @@ function AffichageAjoutPhoto(popupRetour, popupTitre, popupContent, popupForm) {
     // Déclaration des différents éléments
     const form = document.querySelector("form")
     const boutonAjoutPhoto = document.querySelector(".popupForm_Ajoutphoto input")
+    const containerAjoutPhoto = document.querySelector(".ajoutPhoto_container")
+    const PrevisuImage = document.querySelector(".popupForm_Image")
 
     // Ajouts des EventListeners
         // Choix d'une image
-        boutonAjoutPhoto.addEventListener("click", function (event) {
-            event.preventDefault();
+        boutonAjoutPhoto.addEventListener("change", function () {
+            const fichier = this.files[0]
+            const reader = new FileReader()
+
+            if (fichier) {
+                reader.readAsDataURL(fichier);
+            }
+
+            reader.addEventListener("load", function () {
+                PrevisuImage.src = reader.result;
+                PrevisuImage.classList.remove("inactive")
+                containerAjoutPhoto.classList.add("inactive")
+            });
         })
+
+
+        
 }
 
 // Retour à la première partie du PopUp
