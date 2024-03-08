@@ -167,24 +167,15 @@ function AjoutEventListenerModale() {
         affichageAjoutPhoto(modaleRetour)
     })
 
-    // Choix d'une image
+    // Chargement de l'image de prévisualisation
     ajoutPhotoBouton.addEventListener("change", function () {
         const fichier = this.files[0]
-        const reader = new FileReader()
-        const tailleMax = 4194304 
+        AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage)
+    })
 
-        if (fichier.size <= tailleMax) {
-            reader.readAsDataURL(fichier);
-        }
-        else {
-            console.log("erreur")
-        }
-
-        reader.addEventListener("load", function () {
-            ajoutPhotoImage.src = reader.result;
-            ajoutPhotoImage.classList.remove("inactive")
-            ajoutPhotoContainer.classList.add("inactive")
-        });
+    // Création d'un lien entre l'image et l'input de sélection de fichier
+    ajoutPhotoImage.addEventListener("click", function () {
+        ajoutPhotoBouton.click()
     })
 }
 
@@ -218,4 +209,32 @@ function MasquageModale(ajoutPhotoContainer, ajoutPhotoImage) {
     ajoutPhotoImage.src = ""
     ajoutPhotoImage.classList.add("inactive")
     ajoutPhotoContainer.classList.remove("inactive")
+}
+
+// Chargement et affichage de l'image de prévisualisation dans la deuxième partie du module
+function AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage) {
+    const reader = new FileReader()
+    const tailleMax = 4194304 
+    const erreur = document.querySelector(".erreur")
+
+    reader.addEventListener("load", function () {
+        ajoutPhotoImage.src = reader.result;
+        ajoutPhotoImage.classList.remove("inactive")
+        ajoutPhotoContainer.classList.add("inactive")
+    });
+
+    if (fichier.type === "image/jpeg" || fichier.type === "image/png"){
+        if (fichier.size <= tailleMax) {
+            erreur.classList.add("inactive")
+            erreur.innerText = "";
+            reader.readAsDataURL(fichier);
+        }
+        else {
+            erreur.innerText = "L'image sélectionnée a une taille supérieur à 4mo";
+            erreur.classList.remove("inactive")
+        }
+    } else {
+        erreur.innerText = "L'image sélectionnée n'est pas un jpg / png";
+        erreur.classList.remove("inactive")
+    }
 }
