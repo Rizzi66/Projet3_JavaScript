@@ -1,6 +1,6 @@
 /* Modules */
 @import '/FrontEnd/assets/css/formulaires.css';
-@import '/FrontEnd/assets/css/popup.css';
+@import '/FrontEnd/assets/css/modale.css';
 
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -228,16 +228,12 @@ a {
 			padding-bottom: 20px;
 		}
 
-		#modifProjets {
+		.modifProjets {
 			margin-left: 31px;
 			cursor: pointer;
 		}
 
 /* Règle CSS pour afficher ou masquer un élément */
-	.active {
-		display: flex;
-	}
-
 	.inactive {
 		display: none;
 	}

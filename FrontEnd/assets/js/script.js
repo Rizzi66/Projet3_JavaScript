@@ -6,18 +6,23 @@ const categories = await categoriesJSON.json();
 const projetsJSON = await fetch("http://localhost:5678/api/works");
 const projets = await projetsJSON.json();
 
-
 // Initialisation de la page
 let sectionGallery = document.querySelector(".gallery");
 let sectionFiltres = document.querySelector(".filtre");
-let module = false
+let modaleActive = false
+let eventListenersActive = false
+let modalePart2Active = false
 affichageFiltres(categories)
 affichageProjets(projets, sectionGallery)
 
+// Gestion de la page une fois connecté
+let token = window.sessionStorage.getItem("token")
+if (token) {
+    affichageModeEdition()
+}
 
 // Affichage des differents boutons des filtres
 function affichageFiltres(categories) {
-
 	const buttonTous = document.createElement("button")
 	buttonTous.innerText = "Tous"
 	sectionFiltres.appendChild(buttonTous);
@@ -44,7 +49,6 @@ function affichageFiltres(categories) {
     }
 }
 
-
 // Affichage des differents projets en fonction des filtres
 function affichageProjets(projetsFiltre, section) {
     for (let i = 0; i < projetsFiltre.length; i++) {
@@ -52,7 +56,7 @@ function affichageProjets(projetsFiltre, section) {
         let projetTitle = projetsFiltre[i].title
         let elementHTML
 
-        if (module) {
+        if (modaleActive) {
             elementHTML = document.createElement("div")
             elementHTML.innerHTML = `
                 <img src="${projetImage}" alt="${projetTitle}">
@@ -70,25 +74,15 @@ function affichageProjets(projetsFiltre, section) {
      }
 }
 
-
-// Gestion de la page une fois connecté
-let token = window.sessionStorage.getItem("token")
-if (token) {
-    affichageModeEdition()
-}
-
 // Affichage du mode Edition
 function affichageModeEdition() {
     // Ajout du bandeau noir
     const bandeau = document.getElementById("bandeau")
-    bandeau.innerHTML = `<i class="fa-regular fa-pen-to-square"></i>
-    <span>Mode édition</span>`
-    bandeau.classList.add("bandeau")
+    bandeau.classList.remove("inactive")
 
     // Ajout du bouton "modifier"
     const modifProjets = document.getElementById("modifProjets")
-    modifProjets.innerHTML = `<i class="fa-regular fa-pen-to-square"></i>
-    <span>modifier</span>`
+    modifProjets.classList.remove("inactive")
 
     // Décalage du titre "Mes Projets"
     const titreProjets = document.getElementById("titreProjets")
@@ -106,140 +100,122 @@ function affichageModeEdition() {
         // LogOut
         log_in_out.addEventListener("click", function () {
             window.sessionStorage.removeItem("token")
-            location.reload()
+            location.href="./index.html"
         });
         // Modifier
         modifProjets.addEventListener("click", function () {
-            affichageModule()
+            affichageModale()
         })
 }
 
-
-// Affichage du PopUp
-function affichageModule() {
-    // Création du PopUp en HTML
-    const popup = document.getElementById("popup")
-    popup.innerHTML = `<div class="popupContainer">
-        <div class="popupContainer_boutons">
-            <a class="popupContainer_fermeture" id="popupContainer_fermeture" href="#"><i class="fa-solid fa-xmark fa-lg"></i></a>
-            <a class="popupContainer_retour" href="#"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
-        </div>
-        <div class="popupContainer_titre">Galerie photo</div>
-        <div class="popupContainer_content">
-            <div class="popupContainer_images"></div>
-            <div class="popupContainer_validation">
-                <button class="bouton">Ajouter une photo</button>
-            </div>
-        </div>
-        <form action="#" method="post" class="popupContainer_form">
-            <div class="popupForm_Ajoutphoto">
-                <div class="ajoutPhoto_container">
-                    <i class="fa-regular fa-image fa-5x"></i>
-                    <label for="file">+ Ajouter photo</label>
-                    <input type="file" name="file" id="file" accept="image/png, image/jpeg">
-                    <p>jpg, png : 4mo max</p>
-                </div>
-                <img class="popupForm_Image inactive" src="" alt="Prévisualisation de l'image…"/>
-            </div>
-            <label for="titre">Titre</label>
-            <input type="titre" name="titre" id="titre">
-            <label for="categories">Catégorie</label>
-            <input type="categories" name="categories" id="categories">
-            <div class="popupContainer_validation">
-                <input type="submit" value="Valider">
-                <div class="erreur"></div>
-            </div>
-        </form>
-    </div>`
-
-    // Déclaration des différents éléments créés pour le PopUp
-    const popupRetour = document.querySelector(".popupContainer_retour")
-    const popupFermeture = document.querySelector(".popupContainer_fermeture")
-    const popupTitre = document.querySelector(".popupContainer_titre")
-    const popupContent = document.querySelector(".popupContainer_content")   
-    const popupImages = document.querySelector(".popupContainer_images")
-    const popupValidation = document.querySelector(".popupContainer_validation button")
-    const popupForm = document.querySelector(".popup form")
-
-    // Masquage du bouton retour et du formulaire
-    popupRetour.classList.add("inactive")
-    popupForm.classList.add("inactive")
-
-    // Ajouts des différentes photos dans le PopUp
-    module = true
-    popupImages.innerHTML = ""
-    affichageProjets(projets, popupImages);
-
-    // Affichage du PopUp
-    popup.classList.add("active")
-
-    // Ajouts des EventListeners
-        // Fermeture du PopUp avec la croix
-        popupFermeture.addEventListener("click", function () {
-            MasquageModule()
-        })
-        // Fermeture du PopUp en cliquant en dehors du PopUp
-        popup.addEventListener("click", function (event) {
-            if (event.target.id === "popup") {
-                MasquageModule()
-                console.log("test")
-            }
-        })
-        // Ouverture de la deuxième partie du PopUp
-        popupValidation.addEventListener("click", function () {
-            AffichageAjoutPhoto(popupRetour, popupTitre, popupContent, popupForm)
-        })
-        // Retour à la première partie du PopUp
-        popupRetour.addEventListener("click", function () {
-            MasquageAjoutPhoto(popupRetour, popupTitre, popupContent, popupForm)
-        })
-}
-
-// Masquage du PopUp
-function MasquageModule() {
-    module = false
-    popup.classList.remove("active")
-}
-
-// Affichage de la deuxième partie du PopUp
-function AffichageAjoutPhoto(popupRetour, popupTitre, popupContent, popupForm) {
-    popupRetour.classList.remove("inactive")
-    popupTitre.innerText = "Ajout photo"
-    popupContent.classList.add("inactive")
-    popupForm.classList.remove("inactive")
-
+// Affichage de la modale
+function affichageModale() {
     // Déclaration des différents éléments
-    const form = document.querySelector("form")
-    const boutonAjoutPhoto = document.querySelector(".popupForm_Ajoutphoto input")
-    const containerAjoutPhoto = document.querySelector(".ajoutPhoto_container")
-    const PrevisuImage = document.querySelector(".popupForm_Image")
+    const modale = document.getElementById("modale")  
+    const modaleImages = document.querySelector(".modaleContainer_images")
 
-    // Ajouts des EventListeners
-        // Choix d'une image
-        boutonAjoutPhoto.addEventListener("change", function () {
-            const fichier = this.files[0]
-            const reader = new FileReader()
+    // Ajouts des EventListeners de la modale (1 fois seulement)
+    if (!eventListenersActive) {
+        eventListenersActive = true
+        AjoutEventListenerModale()
+    }
 
-            if (fichier) {
-                reader.readAsDataURL(fichier);
-            }
+    // Ajouts des différentes photos dans la modale
+    modaleActive = true
+    modaleImages.innerHTML = ""
+    affichageProjets(projets, modaleImages);
 
-            reader.addEventListener("load", function () {
-                PrevisuImage.src = reader.result;
-                PrevisuImage.classList.remove("inactive")
-                containerAjoutPhoto.classList.add("inactive")
-            });
-        })
-
-
-        
+    // Affichage de la modale
+    modale.classList.remove("inactive")
 }
 
-// Retour à la première partie du PopUp
-function MasquageAjoutPhoto(popupRetour, popupTitre, popupContent, popupForm) {
-    popupRetour.classList.add("inactive")
-    popupTitre.innerText = "Galerie photo"
-    popupContent.classList.remove("inactive")
-    popupForm.classList.add("inactive")
+// Ajouts des EventListeners de la modale
+function AjoutEventListenerModale() {
+    // Déclaration des différents éléments
+    const modaleRetour = document.querySelector(".modaleContainer_retour")
+    const modaleFermeture = document.querySelector(".modaleContainer_fermeture")
+    const modaleValidation = document.querySelector(".modaleContainer_validation button")
+    const ajoutPhotoBouton = document.querySelector(".ajoutPhoto_container input")
+    const ajoutPhotoContainer = document.querySelector(".ajoutPhoto_container")
+    const ajoutPhotoImage = document.querySelector(".modaleForm_Ajoutphoto img")
+
+    // Fermeture de la modale en cliquant en dehors de la modale
+    modale.addEventListener("click", function (event) {
+        if (event.target.id === "modale") {
+            MasquageModale(ajoutPhotoContainer, ajoutPhotoImage)
+            modalePart2Active = false
+            affichageAjoutPhoto(modaleRetour)
+        }
+    })
+
+    // Fermeture de la modale avec la croix
+    modaleFermeture.addEventListener("click", function () {
+    MasquageModale(ajoutPhotoContainer, ajoutPhotoImage)
+    modalePart2Active = false
+    affichageAjoutPhoto(modaleRetour)
+    })
+
+    // Ouverture de la deuxième partie de la modale
+    modaleValidation.addEventListener("click", function () {
+        modalePart2Active = true
+        affichageAjoutPhoto(modaleRetour)
+    })
+
+    // Retour à la première partie de la modale
+    modaleRetour.addEventListener("click", function () {
+        modalePart2Active = false
+        affichageAjoutPhoto(modaleRetour)
+    })
+
+    // Choix d'une image
+    ajoutPhotoBouton.addEventListener("change", function () {
+        const fichier = this.files[0]
+        const reader = new FileReader()
+        const tailleMax = 4194304 
+
+        if (fichier.size <= tailleMax) {
+            reader.readAsDataURL(fichier);
+        }
+        else {
+            console.log("erreur")
+        }
+
+        reader.addEventListener("load", function () {
+            ajoutPhotoImage.src = reader.result;
+            ajoutPhotoImage.classList.remove("inactive")
+            ajoutPhotoContainer.classList.add("inactive")
+        });
+    })
 }
 
+// Affichage ou masquage de la deuxième partie de la modale
+function affichageAjoutPhoto(modaleRetour) {
+    // Déclaration des différents éléments
+    const modaleTitre = document.querySelector(".modaleContainer_titre")
+    const modaleContent = document.querySelector(".modaleContainer_content") 
+    const modaleForm = document.querySelector(".modaleContainer_form")
+
+    // Verification de la partie de la modale afficher à l'écran pour afficher ou masquer les différents élements
+    if (modalePart2Active) {
+        modaleRetour.classList.remove("inactive")
+        modaleTitre.innerText = "Ajout photo"
+        modaleContent.classList.add("inactive")
+        modaleForm.classList.remove("inactive")
+    } else {
+        modaleRetour.classList.add("inactive")
+        modaleTitre.innerText = "Galerie photo"
+        modaleContent.classList.remove("inactive")
+        modaleForm.classList.add("inactive")
+    }
+}
+
+// Masquage de la modale
+function MasquageModale(ajoutPhotoContainer, ajoutPhotoImage) {
+    modaleActive = false
+    modale.classList.add("inactive")
+
+    // Remise à zéro de la deuxième partie de la modale
+    ajoutPhotoImage.src = ""
+    ajoutPhotoImage.classList.add("inactive")
+    ajoutPhotoContainer.classList.remove("inactive")
+}

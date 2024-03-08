@@ -15,7 +15,10 @@
 	<script type="module" src="./assets/js/script.js" defer></script>
 </head>
 <body>
-<div id="bandeau"></div>
+<div id="bandeau" class="bandeau inactive">
+	<i class="fa-regular fa-pen-to-square"></i>
+    <span>Mode édition</span>
+</div>
 <div class="size-container">
 	<header>
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
@@ -43,7 +46,10 @@
 		<section id="portfolio">
 			<div id="titreProjets">
 				<h2>Mes Projets</h2>
-				<span id="modifProjets"></span>
+				<span id="modifProjets" class="modifProjets inactive">
+					<i class="fa-regular fa-pen-to-square"></i>
+					<span>modifier</span>
+				</span>
 			</div>
 			<div class="filtre"></div>
 			<div class="gallery"></div>
@@ -71,6 +77,39 @@
 		</nav>
 	</footer>
 </div>
-<div class="popup" id="popup"></div>
+<div class="modale inactive" id="modale">
+	<div class="modaleContainer">
+		<div class="modaleContainer_boutons">
+			<a class="modaleContainer_fermeture" href="#"><i class="fa-solid fa-xmark fa-lg"></i></a>
+			<a class="modaleContainer_retour inactive" href="#"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
+		</div>
+		<div class="modaleContainer_titre">Galerie photo</div>
+		<div class="modaleContainer_content">
+			<div class="modaleContainer_images"></div>
+			<div class="modaleContainer_validation">
+				<button>Ajouter une photo</button>
+			</div>
+		</div>
+		<form action="#" method="post" class="modaleContainer_form inactive">
+			<div class="modaleForm_Ajoutphoto">
+				<div class="ajoutPhoto_container">
+					<i class="fa-regular fa-image fa-5x"></i>
+					<label for="file">+ Ajouter photo</label>
+					<input class="inactive" type="file" name="file" id="file" accept="image/png, image/jpeg">
+					<p>jpg, png : 4mo max</p>
+				</div>
+				<img class="inactive" src="" alt="Prévisualisation de l'image…"/>
+			</div>
+			<label for="titre">Titre</label>
+			<input type="titre" name="titre" id="titre">
+			<label for="categories">Catégorie</label>
+			<input type="categories" name="categories" id="categories">
+			<div class="modaleContainer_validation">
+				<input type="submit" value="Valider">
+				<div class="erreur"></div>
+			</div>
+		</form>
+	</div>
+</div>
 </body>
 </html>

@@ -25,10 +25,10 @@
         margin-bottom: 7px;
     }
 
-    .contact form, .login form, .popupContainer_form {
-        text-align: left;
+    .contact form, .login form, .modaleContainer_form {
         display: flex;
         flex-direction: column;
+        text-align: left;
     }
 
     .erreur {
@@ -64,7 +64,7 @@
             margin: 30px 0 7px 0;
         }
 
-        .popup label {
+        .modale label {
             margin: 20px 0 10px 0;
         }
 
@@ -77,7 +77,7 @@
     }
 
 /* Input bouton du formulaire */
-    input[type="submit"], .bouton {
+    input[type="submit"], .modaleContainer_validation button {
         font-family: 'Syne';
         font-weight: 700;
         color: white;
@@ -92,7 +92,7 @@
         cursor: pointer;
     }
 
-    .bouton, .popupContainer_validation input {
+    .modaleContainer_validation button, .modaleContainer_validation input {
         margin: 0;
         width: 100%;
     }
