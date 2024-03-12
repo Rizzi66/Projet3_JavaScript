@@ -12,17 +12,20 @@ let sectionFiltres = document.querySelector(".filtre");
 let modaleActive = false
 let eventListenersActive = false
 let modalePart2Active = false
-affichageFiltres(categories)
+let formImageValid = false
+let formTitreValid = false
+affichageCategories(categories)
 affichageProjets(projets, sectionGallery)
 
 // Gestion de la page une fois connecté
 let token = window.sessionStorage.getItem("token")
+console.log(token)
 if (token) {
     affichageModeEdition()
 }
 
-// Affichage des differents boutons des filtres
-function affichageFiltres(categories) {
+// Affichage des differentes categories et boutons des filtres (pour la modale ou la page d'accueil)
+function affichageCategories(categories) {
 	const buttonTous = document.createElement("button")
 	buttonTous.innerText = "Tous"
 	sectionFiltres.appendChild(buttonTous);
@@ -35,9 +38,19 @@ function affichageFiltres(categories) {
     // Création des boutons et de leur eventListener
 	for (let i = 0; i < categories.length; i++) {
         let categorieName = categories[i].name   
+        let categorieID = categories[i].id
+
         let button = document.createElement("button")
         button.innerText = categorieName;
         sectionFiltres.appendChild(button);
+
+        const selectCategories = document.getElementById("categories")
+        let option = document.createElement("option")
+        option.innerText = categorieName
+        option.value = categorieName
+        option.dataset.id = categorieID
+        selectCategories.appendChild(option);
+
 
 		button.addEventListener("click", function () {
 			const projetsFiltre = projets.filter(function (projet) {
@@ -49,19 +62,33 @@ function affichageFiltres(categories) {
     }
 }
 
-// Affichage des differents projets en fonction des filtres
+// Affichage des differents projets en fonction des filtres (pour la modale ou la page d'accueil)
 function affichageProjets(projetsFiltre, section) {
     for (let i = 0; i < projetsFiltre.length; i++) {
         let projetImage = projetsFiltre[i].imageUrl
         let projetTitle = projetsFiltre[i].title
+        let projetID = projetsFiltre[i].id
         let elementHTML
 
         if (modaleActive) {
             elementHTML = document.createElement("div")
-            elementHTML.innerHTML = `
-                <img src="${projetImage}" alt="${projetTitle}">
-                <i class="fa-solid fa-trash-can fa-xs"></i>
-                `;  
+
+            let elementHTML_img = document.createElement("img") 
+            elementHTML_img.src = projetImage
+            elementHTML_img.alt = projetTitle
+
+            let elementHTML_icone = document.createElement("i") 
+            elementHTML_icone.classList.add("fa-solid", "fa-trash-can", "fa-xs")
+            elementHTML_icone.dataset.id = projetID
+
+            elementHTML_icone.addEventListener("click", function () {
+                SupprimerProjet(projetID)
+            })
+
+            elementHTML.appendChild(elementHTML_img)
+            elementHTML.appendChild(elementHTML_icone)
+            console.log(elementHTML)
+
         } else {
             elementHTML = document.createElement("figure")
             elementHTML.innerHTML = `
@@ -80,6 +107,10 @@ function affichageModeEdition() {
     const bandeau = document.getElementById("bandeau")
     bandeau.classList.remove("inactive")
 
+    // Masquage de la marge du header
+    const header = document.querySelector("header")
+    header.classList.add("margin")
+
     // Ajout du bouton "modifier"
     const modifProjets = document.getElementById("modifProjets")
     modifProjets.classList.remove("inactive")
@@ -94,7 +125,7 @@ function affichageModeEdition() {
 
     // Modification du bouton log-in en log-out
     const log_in_out = document.getElementById("log_in_out")
-    log_in_out.innerHTML = `<a href="#">logout</a>` 
+    log_in_out.innerText = "logout" 
 
     // Ajouts des EventListeners
         // LogOut
@@ -135,56 +166,76 @@ function AjoutEventListenerModale() {
     const modaleRetour = document.querySelector(".modaleContainer_retour")
     const modaleFermeture = document.querySelector(".modaleContainer_fermeture")
     const modaleValidation = document.querySelector(".modaleContainer_validation button")
+    const modaleForm = document.querySelector(".modaleContainer_form")
     const ajoutPhotoBouton = document.querySelector(".ajoutPhoto_container input")
     const ajoutPhotoContainer = document.querySelector(".ajoutPhoto_container")
-    const ajoutPhotoImage = document.querySelector(".modaleForm_Ajoutphoto img")
+    const ajoutPhotoImage = document.querySelector(".modaleForm_ajoutPhoto img")
+    const erreur = document.querySelector(".erreur")    
+    const formTitre = document.getElementById("titre")
+    const modaleSubmit = document.getElementById("modaleForm_valider")
+
 
     // Fermeture de la modale en cliquant en dehors de la modale
     modale.addEventListener("click", function (event) {
         if (event.target.id === "modale") {
-            MasquageModale(ajoutPhotoContainer, ajoutPhotoImage)
+            MasquageModale(ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit)
             modalePart2Active = false
-            affichageAjoutPhoto(modaleRetour)
+            affichageAjoutPhoto(modaleRetour, modaleForm)
         }
     })
 
     // Fermeture de la modale avec la croix
     modaleFermeture.addEventListener("click", function () {
-    MasquageModale(ajoutPhotoContainer, ajoutPhotoImage)
+    MasquageModale(ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit)
     modalePart2Active = false
-    affichageAjoutPhoto(modaleRetour)
+    affichageAjoutPhoto(modaleRetour, modaleForm)
     })
 
     // Ouverture de la deuxième partie de la modale
     modaleValidation.addEventListener("click", function () {
         modalePart2Active = true
-        affichageAjoutPhoto(modaleRetour)
+        affichageAjoutPhoto(modaleRetour, modaleForm)
     })
 
     // Retour à la première partie de la modale
     modaleRetour.addEventListener("click", function () {
         modalePart2Active = false
-        affichageAjoutPhoto(modaleRetour)
+        affichageAjoutPhoto(modaleRetour, modaleForm)
     })
 
     // Chargement de l'image de prévisualisation
     ajoutPhotoBouton.addEventListener("change", function () {
         const fichier = this.files[0]
-        AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage)
+        AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit)
     })
 
     // Création d'un lien entre l'image et l'input de sélection de fichier
     ajoutPhotoImage.addEventListener("click", function () {
         ajoutPhotoBouton.click()
     })
+
+    // Vérification de l'input "titre"
+    formTitre.addEventListener("keyup", function () {
+        if (formTitre.value.trim() === "") {
+            formTitreValid = false
+        } else {
+            formTitreValid = true
+        }
+        GrisageSubmit(modaleSubmit)
+    })
+
+    // Envoie du formulaire AjoutPhoto
+    modaleForm.addEventListener("submit", async (event) => {
+        event.preventDefault()
+        AjouterProjet(modaleForm)
+    })
 }
 
 // Affichage ou masquage de la deuxième partie de la modale
-function affichageAjoutPhoto(modaleRetour) {
+function affichageAjoutPhoto(modaleRetour, modaleForm) {
     // Déclaration des différents éléments
     const modaleTitre = document.querySelector(".modaleContainer_titre")
     const modaleContent = document.querySelector(".modaleContainer_content") 
-    const modaleForm = document.querySelector(".modaleContainer_form")
 
     // Verification de la partie de la modale afficher à l'écran pour afficher ou masquer les différents élements
     if (modalePart2Active) {
@@ -201,7 +252,9 @@ function affichageAjoutPhoto(modaleRetour) {
 }
 
 // Masquage de la modale
-function MasquageModale(ajoutPhotoContainer, ajoutPhotoImage) {
+function MasquageModale(ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit) {
+    const inputTitre = document.getElementById("titre")
+
     modaleActive = false
     modale.classList.add("inactive")
 
@@ -209,18 +262,27 @@ function MasquageModale(ajoutPhotoContainer, ajoutPhotoImage) {
     ajoutPhotoImage.src = ""
     ajoutPhotoImage.classList.add("inactive")
     ajoutPhotoContainer.classList.remove("inactive")
+    formImageValid = false
+    erreur.innerText = "";
+    erreur.classList.add("inactive")
+    inputTitre.value = ""
+    formTitreValid = false
+
+    GrisageSubmit(modaleSubmit)
 }
 
 // Chargement et affichage de l'image de prévisualisation dans la deuxième partie du module
-function AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage) {
+function AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit) {
     const reader = new FileReader()
     const tailleMax = 4194304 
-    const erreur = document.querySelector(".erreur")
 
     reader.addEventListener("load", function () {
         ajoutPhotoImage.src = reader.result;
+        console.log(reader.result)
         ajoutPhotoImage.classList.remove("inactive")
         ajoutPhotoContainer.classList.add("inactive")
+        formImageValid = true 
+        GrisageSubmit(modaleSubmit)       
     });
 
     if (fichier.type === "image/jpeg" || fichier.type === "image/png"){
@@ -232,9 +294,95 @@ function AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage) {
         else {
             erreur.innerText = "L'image sélectionnée a une taille supérieur à 4mo";
             erreur.classList.remove("inactive")
+            ajoutPhotoImage.src = ""
+            ajoutPhotoImage.classList.add("inactive")
+            ajoutPhotoContainer.classList.remove("inactive")
+            formImageValid = false
+            GrisageSubmit(modaleSubmit)
         }
     } else {
         erreur.innerText = "L'image sélectionnée n'est pas un jpg / png";
         erreur.classList.remove("inactive")
+        ajoutPhotoImage.src = ""
+        ajoutPhotoImage.classList.add("inactive")
+        ajoutPhotoContainer.classList.remove("inactive")
+        formImageValid = false
+        GrisageSubmit(modaleSubmit)
     }
+}
+
+// Grisage du bouton submit "Valider" lorsque les champs ne sont pas correctement rempli
+function GrisageSubmit(modaleSubmit) {
+    if (formImageValid && formTitreValid) {
+        modaleSubmit.classList.remove("nonValide")
+    } else {
+        modaleSubmit.classList.add("nonValide")
+    }
+}
+
+// Mise en forme du POST HTTP pour ajouter un nouveau projet
+async function AjouterProjet(modaleForm) {
+    const inputFile = modaleForm.file.files[0]
+    console.log(inputFile)
+    const inputCategories = modaleForm.categories
+    const categorieSelected = inputCategories[inputCategories.selectedIndex]
+    console.log(categorieSelected.getAttribute("data-id"))
+    console.log(modaleForm.titre.value)
+
+
+    const formData = new FormData();
+    console.log(formData)
+    formData.append("image", inputFile);
+    console.log(formData)
+    formData.append("title", modaleForm.titre.value);
+    console.log(formData)
+    formData.append("category", categorieSelected.getAttribute("data-id"));
+    console.log(formData)
+
+
+    // let token = window.sessionStorage.getItem("token")
+    console.log(token)
+    const formHeader = new Headers();
+    formHeader.append('Authorization', `Bearer ${token}`);
+    // const bodyLogin = {
+    //     "email": form.email.value,
+    //     "password": form.password.value,
+    // }
+    // const bodyLoginJSON = JSON.stringify(bodyLogin);
+    
+    // Envoie de la requète HTTP
+    const reponse = await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: formHeader,
+        body: formData,
+    })
+
+    // Récupération de la réponse HTTP et stockage du token
+    const data = await reponse.json()
+    console.log(data)
+    // if (reponse.ok) {
+    //   const token = data.token
+    //   window.sessionStorage.setItem("token", token);
+    //   location.href = "./index.html";
+    // } else {
+    //     document.querySelector(".erreur").innerText = "Nom d'utilisateur ou mot de passe incorrect";
+    // }
+
+}
+
+async function SupprimerProjet(id) {
+
+    console.log(token)
+    const formHeader = new Headers();
+    formHeader.append('Authorization', `Bearer ${token}`);
+
+    let url = "http://localhost:5678/api/works/" + id
+
+    const reponse = await fetch(url, {
+        method: "DELETE",
+        headers: formHeader,
+    })
+
+    const data = await reponse.json()
+    console.log(data)
 }
