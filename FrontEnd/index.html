@@ -24,10 +24,10 @@
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
 			<ul>
-				<li>projets</li>
+				<li><a href="./index.html" class="gras">projets</a></li>
 				<li>contact</li>
 				<li id="log_in_out"><a href="./login.html">login</a></li>
-				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+				<li id="insta"><i class="fa-brands fa-instagram fa-lg"></i></li>
 			</ul>
 		</nav>
 	</header>
@@ -68,15 +68,14 @@
 			</form>
 		</section>
 	</main>
-
-	<footer>
-		<nav>
-			<ul>
-				<li>Mentions Légales</li>
-			</ul>
-		</nav>
-	</footer>
 </div>
+<footer>
+	<nav>
+		<ul>
+			<li>Mentions Légales</li>
+		</ul>
+	</nav>
+</footer>
 <div class="modale inactive" id="modale">
 	<div class="modaleContainer">
 		<div class="modaleContainer_boutons">
@@ -91,21 +90,21 @@
 			</div>
 		</div>
 		<form action="#" method="post" class="modaleContainer_form inactive">
-			<div class="modaleForm_Ajoutphoto">
+			<div class="modaleForm_ajoutPhoto">
 				<div class="ajoutPhoto_container">
 					<i class="fa-regular fa-image fa-5x"></i>
 					<label for="file">+ Ajouter photo</label>
-					<input class="inactive" type="file" name="file" id="file" accept="image/png, image/jpeg">
+					<input class="inactive" type="file" name="file" id="file" accept="image/png, image/jpeg" required>
 					<p>jpg, png : 4mo max</p>
 				</div>
 				<img class="inactive" src="" alt="Prévisualisation de l'image…"/>
 			</div>
 			<div class="erreur inactive"></div>
 			<label for="titre">Titre</label>
-			<input type="titre" name="titre" id="titre">
+			<input type="titre" name="titre" id="titre" maxlength="50" required>
 			<label for="categories">Catégorie</label>
-			<input type="categories" name="categories" id="categories">
-			<div class="modaleContainer_validation">
+			<select name="categories" id="categories" data-test="example" class="categories"></select>
+			<div class="modaleContainer_validation nonValide" id="modaleForm_valider">
 				<input type="submit" value="Valider">
 			</div>
 		</form>

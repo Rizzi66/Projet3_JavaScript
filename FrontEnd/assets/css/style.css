@@ -57,7 +57,13 @@ table {
 }
 
 /** end reset css**/
+html, body {
+	height: 100%;
+}
+
 body {
+	display: table;
+	width: 100%;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 	background-color: #FFFEF8;
@@ -71,17 +77,27 @@ body {
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0;
+	align-items: center;
+	padding: 38px 0 92px;
+	margin: 12px 0 47px;
 }
 
 footer {
+	display: table-row;
 	background-color: #FFF;
 }
 
-footer nav ul {
+footer nav {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	max-width: 1140px;
+	margin: auto;
+}
+
+footer nav li {
+	font-size: 14px;
+	font-weight: 300;
+	margin: 26px 0 20px;
 }
 
 section {
@@ -95,12 +111,18 @@ h1 {
 	font-size: 22px;
 	font-weight: 800;
 	color: #B1663C;
+	padding-top: 2px;
 }
 
 h1 > span {
+	display: block;
 	font-family: 'Work Sans';
-	font-size:10px;
-	letter-spacing: 0.1em;
+	font-size: 10px;
+	font-weight: 400;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	margin-top: 6px;
+	padding: 1px 0;
 }
 
 h2 {
@@ -117,8 +139,21 @@ nav ul {
 }
 
 nav li {
-	padding: 0 10px;
-	font-size: 1.2em;
+	margin-left: 44px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+#insta {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 22px;
+	height: 22px;
+}
+
+#insta i {
+	font-weight: 500;
 }
 
 li:hover {
@@ -129,31 +164,41 @@ a {
 	text-decoration: none;
 }
 
+a:visited {
+	color: inherit;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
+	margin: 0 8.33% 139px;
 }
 
 #introduction figure {
-	flex: 1;
+	width: 50%;
 }
 
 #introduction img {
-	display: block;
-	margin: auto;
-	width: 80%;
+	width: 100%;
 }
 
 #introduction article {
 	flex: 1;
+	padding-left: 72px;
 }
 
 #introduction h2 {
-	margin-bottom: 1em;
+	margin-bottom: 23px;
 }
 
 #introduction p {
-	margin-bottom: 0.5em;
+	margin-bottom: 16px;
+	color: #3D3D3D;
+	line-height: 16px;
+}
+
+#portfolio {
+	margin: 0 8.33% 57px;
 }
 
 #portfolio h2 {
@@ -193,15 +238,21 @@ a {
 
 /* Galerie d'images */
 	.gallery {
-		width: 100%;
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
-		grid-column-gap: 20px;
-		grid-row-gap: 20px;
+		grid-column-gap: 19px;
+		grid-row-gap: 18px;
 	}
 
 	.gallery img {
 		width: 100%;
+		height: 407px;
+		object-fit: cover;
+	}
+
+	figcaption {
+		padding-top: 5px;
+		font-size: 13px;
 	}
 
 /* Modification après login */
@@ -225,7 +276,7 @@ a {
 		.titreProjets {
 			position: relative;
 			left: 53px;
-			padding-bottom: 20px;
+			padding-bottom: 62px;
 		}
 
 		.modifProjets {
@@ -236,4 +287,12 @@ a {
 /* Règle CSS pour afficher ou masquer un élément */
 	.inactive {
 		display: none;
+	}
+
+	.margin {
+		margin: 0;
+	}
+
+	.gras {
+		font-weight: 700;
 	}
