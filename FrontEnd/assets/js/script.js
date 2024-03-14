@@ -3,8 +3,8 @@ const categoriesJSON = await fetch("http://localhost:5678/api/categories");
 const categories = await categoriesJSON.json();
 
 // Récupération des données "Projets" via l'API
-const projetsJSON = await fetch("http://localhost:5678/api/works");
-const projets = await projetsJSON.json();
+let projetsJSON = await fetch("http://localhost:5678/api/works");
+let projets = await projetsJSON.json();
 
 // Gestion de la page une fois connecté
 let token = window.sessionStorage.getItem("token")
@@ -236,7 +236,7 @@ function AjoutEventListenerModale() {
     // Envoie du formulaire AjoutPhoto
     modaleForm.addEventListener("submit", async (event) => {
         event.preventDefault()
-        AjouterProjet(modaleForm)
+        AjouterProjet(modaleRetour, modaleForm)
     })
 }
 
@@ -351,7 +351,7 @@ function GrisageSubmit(modaleSubmit) {
 }
 
 // Ajout d'un nouveau projet via un POST HTTP
-async function AjouterProjet(modaleForm) {
+async function AjouterProjet(modaleRetour, modaleForm) {
     // Récupération des différents éléments
     const formFile = modaleForm.file
     const formTitre = modaleForm.titre
@@ -379,6 +379,20 @@ async function AjouterProjet(modaleForm) {
         headers: formHeader,
         body: formData,
     })
+
+    // Récupération des données "Projets" via l'API
+    projetsJSON = await fetch("http://localhost:5678/api/works");
+    projets = await projetsJSON.json();
+
+    // Rechargement des projets
+    photoModale = true
+    sectionGallery.innerHTML = "";
+    modaleImages.innerHTML = "";
+    affichageProjets(projets)
+
+    // Retour à la page précédente de la modale
+    modalePart2Active = false
+    affichageAjoutPhoto(modaleRetour, modaleForm)
 }
 
 async function SupprimerProjet(id) {
@@ -394,4 +408,14 @@ async function SupprimerProjet(id) {
         method: "DELETE",
         headers: formHeader
     })
+
+    // Récupération des données "Projets" via l'API
+    projetsJSON = await fetch("http://localhost:5678/api/works");
+    projets = await projetsJSON.json();
+
+    // Rechargement des projets
+    photoModale = true
+    sectionGallery.innerHTML = "";
+    modaleImages.innerHTML = "";
+    affichageProjets(projets)
 }
