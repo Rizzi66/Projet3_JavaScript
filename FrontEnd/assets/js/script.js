@@ -6,98 +6,116 @@ const categories = await categoriesJSON.json();
 const projetsJSON = await fetch("http://localhost:5678/api/works");
 const projets = await projetsJSON.json();
 
-// Initialisation de la page
-let sectionGallery = document.querySelector(".gallery");
-let sectionFiltres = document.querySelector(".filtre");
-let modaleActive = false
-let eventListenersActive = false
-let modalePart2Active = false
-let formImageValid = false
-let formTitreValid = false
-affichageCategories(categories)
-affichageProjets(projets, sectionGallery)
-
 // Gestion de la page une fois connecté
 let token = window.sessionStorage.getItem("token")
-console.log(token)
 if (token) {
     affichageModeEdition()
 }
 
-// Affichage des differentes categories et boutons des filtres (pour la modale ou la page d'accueil)
+// Initialisation de la page
+const sectionGallery = document.querySelector(".gallery");
+const modaleImages = document.querySelector(".modaleContainer_images")
+let photoModale = true
+let eventListenersActive = false
+let modalePart2Active = false
+let formImageValid = false
+let formTitreValid = false
+
+// Lancement des fonctions de démarrage
+affichageCategories(categories)
+affichageProjets(projets)
+
+// Affichage des differentes categories et boutons des filtres
 function affichageCategories(categories) {
+    // Création bouton "Tous"
+    const sectionFiltres = document.querySelector(".filtre");
 	const buttonTous = document.createElement("button")
 	buttonTous.innerText = "Tous"
 	sectionFiltres.appendChild(buttonTous);
 
+    // Eventlistener du bouton "Tous"
 	buttonTous.addEventListener("click", function () {
+        photoModale = false
 		sectionGallery.innerHTML = "";
-		affichageProjets(projets, sectionGallery);
+		affichageProjets(projets);
 	});
 
-    // Création des boutons et de leur eventListener
+    //  Boucle pour la création des autres catégories
 	for (let i = 0; i < categories.length; i++) {
+        // Récupération des différents éléments utile
         let categorieName = categories[i].name   
         let categorieID = categories[i].id
 
-        let button = document.createElement("button")
+        // Création des différents boutons
+        const button = document.createElement("button")
         button.innerText = categorieName;
         sectionFiltres.appendChild(button);
 
+        // Multiples eventlistener des boutons (pour filtrage)
+        button.addEventListener("click", function () {
+			const projetsFiltre = projets.filter(function (projet) {
+				return projet.categoryId === i+1;
+			});
+            photoModale = false
+			sectionGallery.innerHTML = "";
+			affichageProjets(projetsFiltre);
+		});
+
+        // Création et ajout des catégories dans le formulaire de la modale
         const selectCategories = document.getElementById("categories")
-        let option = document.createElement("option")
+        const option = document.createElement("option")
         option.innerText = categorieName
         option.value = categorieName
         option.dataset.id = categorieID
         selectCategories.appendChild(option);
-
-
-		button.addEventListener("click", function () {
-			const projetsFiltre = projets.filter(function (projet) {
-				return projet.categoryId === i+1;
-			});
-			sectionGallery.innerHTML = "";
-			affichageProjets(projetsFiltre, sectionGallery);
-		});
     }
 }
 
-// Affichage des differents projets en fonction des filtres (pour la modale ou la page d'accueil)
-function affichageProjets(projetsFiltre, section) {
-    for (let i = 0; i < projetsFiltre.length; i++) {
-        let projetImage = projetsFiltre[i].imageUrl
-        let projetTitle = projetsFiltre[i].title
-        let projetID = projetsFiltre[i].id
-        let elementHTML
+// Affichage des differents projets en fonction des filtres (pour la modale et la page d'accueil)
+function affichageProjets(projets) {
+    // Boucle pour sélectionné les projets à afficher
+    for (let i = 0; i < projets.length; i++) {
+        // Récupération des différents éléments utile
+        let projetImage = projets[i].imageUrl
+        let projetTitle = projets[i].title
+        let projetID = projets[i].id
 
-        if (modaleActive) {
-            elementHTML = document.createElement("div")
+        // Création image (en double) 
+        const elementHTML_img = document.createElement("img") 
+        const elementHTML_img2 = document.createElement("img") 
+        elementHTML_img.src = projetImage
+        elementHTML_img2.src = projetImage
+        elementHTML_img.alt = projetTitle
+        elementHTML_img2.alt = projetTitle
 
-            let elementHTML_img = document.createElement("img") 
-            elementHTML_img.src = projetImage
-            elementHTML_img.alt = projetTitle
+        // Création figcaption pour titre
+        const elementHTML_figcap = document.createElement("figcaption")
+        elementHTML_figcap.innerText = projetTitle
 
-            let elementHTML_icone = document.createElement("i") 
+        // Création et Ajout dans le code du HTML
+        const elementHTML_fig = document.createElement("figure")
+        elementHTML_fig.appendChild(elementHTML_img)
+        elementHTML_fig.appendChild(elementHTML_figcap)
+        sectionGallery.appendChild(elementHTML_fig);
+
+        // Vérif si les photos de la modale doivent etre ajouté
+        if (photoModale) {        
+            // Création icone suppression
+            const elementHTML_icone = document.createElement("i") 
             elementHTML_icone.classList.add("fa-solid", "fa-trash-can", "fa-xs")
             elementHTML_icone.dataset.id = projetID
 
+            // Multiples eventlistener de la suppression des photos
             elementHTML_icone.addEventListener("click", function () {
                 SupprimerProjet(projetID)
             })
 
-            elementHTML.appendChild(elementHTML_img)
-            elementHTML.appendChild(elementHTML_icone)
-            console.log(elementHTML)
-
-        } else {
-            elementHTML = document.createElement("figure")
-            elementHTML.innerHTML = `
-                <img src="${projetImage}" alt="${projetTitle}">
-                <figcaption>${projetTitle}</figcaption>
-                `;
+            // Création et ajout des photos dans la modale
+            const elementHTML_div = document.createElement("div")
+            elementHTML_div.appendChild(elementHTML_img2)
+            elementHTML_div.appendChild(elementHTML_icone)
+            modaleImages.appendChild(elementHTML_div)
         }
-
-        section.appendChild(elementHTML);
      }
 }
 
@@ -141,22 +159,14 @@ function affichageModeEdition() {
 
 // Affichage de la modale
 function affichageModale() {
-    // Déclaration des différents éléments
-    const modale = document.getElementById("modale")  
-    const modaleImages = document.querySelector(".modaleContainer_images")
-
     // Ajouts des EventListeners de la modale (1 fois seulement)
     if (!eventListenersActive) {
         eventListenersActive = true
         AjoutEventListenerModale()
     }
 
-    // Ajouts des différentes photos dans la modale
-    modaleActive = true
-    modaleImages.innerHTML = ""
-    affichageProjets(projets, modaleImages);
-
     // Affichage de la modale
+    const modale = document.getElementById("modale")  
     modale.classList.remove("inactive")
 }
 
@@ -173,7 +183,6 @@ function AjoutEventListenerModale() {
     const erreur = document.querySelector(".erreur")    
     const formTitre = document.getElementById("titre")
     const modaleSubmit = document.getElementById("modaleForm_valider")
-
 
     // Fermeture de la modale en cliquant en dehors de la modale
     modale.addEventListener("click", function (event) {
@@ -237,7 +246,7 @@ function affichageAjoutPhoto(modaleRetour, modaleForm) {
     const modaleTitre = document.querySelector(".modaleContainer_titre")
     const modaleContent = document.querySelector(".modaleContainer_content") 
 
-    // Verification de la partie de la modale afficher à l'écran pour afficher ou masquer les différents élements
+    // Verification de la partie actuellement affiché sur la modale pour (de)afficher l'autre partie
     if (modalePart2Active) {
         modaleRetour.classList.remove("inactive")
         modaleTitre.innerText = "Ajout photo"
@@ -253,59 +262,80 @@ function affichageAjoutPhoto(modaleRetour, modaleForm) {
 
 // Masquage de la modale
 function MasquageModale(ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit) {
-    const inputTitre = document.getElementById("titre")
-
-    modaleActive = false
+    // Masquage de la modale
     modale.classList.add("inactive")
 
-    // Remise à zéro de la deuxième partie de la modale
+    // Remise à zéro de la prévisualisation
     ajoutPhotoImage.src = ""
     ajoutPhotoImage.classList.add("inactive")
     ajoutPhotoContainer.classList.remove("inactive")
     formImageValid = false
+
+    // Remise à zéro du champ "erreur"
     erreur.innerText = "";
     erreur.classList.add("inactive")
+
+    // Remise à zéro du champ "titre"
+    const inputTitre = document.getElementById("titre")
     inputTitre.value = ""
     formTitreValid = false
 
+    // Gestion de la couleur du bouton "Valider"
     GrisageSubmit(modaleSubmit)
 }
 
-// Chargement et affichage de l'image de prévisualisation dans la deuxième partie du module
+// Chargement et affichage de l'image de prévisualisation dans la deuxième partie de la modale
 function AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit) {
+    // Déclaration des éléments
     const reader = new FileReader()
     const tailleMax = 4194304 
 
+    // Ajout d'un EventListener pour savoir quand le reader à charger l'image sélectionné
     reader.addEventListener("load", function () {
+        // Prévisualisation de l'image
         ajoutPhotoImage.src = reader.result;
-        console.log(reader.result)
         ajoutPhotoImage.classList.remove("inactive")
         ajoutPhotoContainer.classList.add("inactive")
+
+        // Gestion de la couleur du bouton "Valider"
         formImageValid = true 
         GrisageSubmit(modaleSubmit)       
     });
 
+    // Vérification du format de l'image sélectionné
     if (fichier.type === "image/jpeg" || fichier.type === "image/png"){
+        // Vérification de la taille de l'image sélectionné
         if (fichier.size <= tailleMax) {
+            // Suppression de l'erreur et chargement du fichier dans le reader
             erreur.classList.add("inactive")
             erreur.innerText = "";
             reader.readAsDataURL(fichier);
         }
         else {
+            // Affichage de l'erreur
             erreur.innerText = "L'image sélectionnée a une taille supérieur à 4mo";
             erreur.classList.remove("inactive")
+
+            // Remise à zéro de la prévisualisation
             ajoutPhotoImage.src = ""
             ajoutPhotoImage.classList.add("inactive")
             ajoutPhotoContainer.classList.remove("inactive")
+
+            // Gestion de la couleur du bouton "Valider"
             formImageValid = false
             GrisageSubmit(modaleSubmit)
         }
     } else {
+        // Affichage de l'erreur
         erreur.innerText = "L'image sélectionnée n'est pas un jpg / png";
         erreur.classList.remove("inactive")
+
+        // Remise à zéro de la prévisualisation
         ajoutPhotoImage.src = ""
         ajoutPhotoImage.classList.add("inactive")
         ajoutPhotoContainer.classList.remove("inactive")
+
+        // Gestion de la couleur du bouton "Valider"
         formImageValid = false
         GrisageSubmit(modaleSubmit)
     }
@@ -320,69 +350,48 @@ function GrisageSubmit(modaleSubmit) {
     }
 }
 
-// Mise en forme du POST HTTP pour ajouter un nouveau projet
+// Ajout d'un nouveau projet via un POST HTTP
 async function AjouterProjet(modaleForm) {
-    const inputFile = modaleForm.file.files[0]
-    console.log(inputFile)
-    const inputCategories = modaleForm.categories
-    const categorieSelected = inputCategories[inputCategories.selectedIndex]
-    console.log(categorieSelected.getAttribute("data-id"))
-    console.log(modaleForm.titre.value)
+    // Récupération des différents éléments
+    const formFile = modaleForm.file
+    const formTitre = modaleForm.titre
+    const formCategories = modaleForm.categories
+    const categorieSelected = formCategories[formCategories.selectedIndex]
 
+    // Conversion au bon formats des différents éléments
+    const inputFile = formFile.files[0]
+    const inputTitre = formTitre.value
+    const inputCategories = categorieSelected.getAttribute("data-id")
 
+    // Création du FormData avec les différents éléments
     const formData = new FormData();
-    console.log(formData)
     formData.append("image", inputFile);
-    console.log(formData)
-    formData.append("title", modaleForm.titre.value);
-    console.log(formData)
-    formData.append("category", categorieSelected.getAttribute("data-id"));
-    console.log(formData)
+    formData.append("title", inputTitre);
+    formData.append("category", inputCategories);
 
-
-    // let token = window.sessionStorage.getItem("token")
-    console.log(token)
+    // Création du FormHeaders avec l'authorization
     const formHeader = new Headers();
     formHeader.append('Authorization', `Bearer ${token}`);
-    // const bodyLogin = {
-    //     "email": form.email.value,
-    //     "password": form.password.value,
-    // }
-    // const bodyLoginJSON = JSON.stringify(bodyLogin);
     
-    // Envoie de la requète HTTP
+    // Envoi de la requète HTTP POST
     const reponse = await fetch("http://localhost:5678/api/works", {
         method: "POST",
         headers: formHeader,
         body: formData,
     })
-
-    // Récupération de la réponse HTTP et stockage du token
-    const data = await reponse.json()
-    console.log(data)
-    // if (reponse.ok) {
-    //   const token = data.token
-    //   window.sessionStorage.setItem("token", token);
-    //   location.href = "./index.html";
-    // } else {
-    //     document.querySelector(".erreur").innerText = "Nom d'utilisateur ou mot de passe incorrect";
-    // }
-
 }
 
 async function SupprimerProjet(id) {
-
-    console.log(token)
+    // Création du FormHeaders avec l'authorization
     const formHeader = new Headers();
     formHeader.append('Authorization', `Bearer ${token}`);
 
+    // Configuration de l'url de l'élément à supprimer
     let url = "http://localhost:5678/api/works/" + id
 
+    // Envoi de la requète HTTP DELETE
     const reponse = await fetch(url, {
         method: "DELETE",
-        headers: formHeader,
+        headers: formHeader
     })
-
-    const data = await reponse.json()
-    console.log(data)
 }

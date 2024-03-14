@@ -3,7 +3,7 @@ const form = document.querySelector("form")
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    
+
     // Mise en forme pour POST HTTP
     const bodyLogin = {
         "email": form.email.value,
@@ -20,7 +20,7 @@ form.addEventListener("submit", async (event) => {
 
     // Récupération de la réponse HTTP et stockage du token
     const data = await reponse.json()
-    if (reponse.ok) {
+    if (reponse.status === 200) {
       const token = data.token
       window.sessionStorage.setItem("token", token);
       location.href = "./index.html";
