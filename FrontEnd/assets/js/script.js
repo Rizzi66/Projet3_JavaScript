@@ -31,10 +31,15 @@ function affichageCategories(categories) {
     const sectionFiltres = document.querySelector(".filtre");
 	const buttonTous = document.createElement("button")
 	buttonTous.innerText = "Tous"
+    buttonTous.classList.add("filtreSelect")
 	sectionFiltres.appendChild(buttonTous);
 
     // Eventlistener du bouton "Tous"
 	buttonTous.addEventListener("click", function () {
+        for (let i = 0; i < buttonAll.length; i++) {
+            buttonAll[i].classList.remove("filtreSelect")
+        }
+        buttonTous.classList.add("filtreSelect")
         photoModale = false
 		sectionGallery.innerHTML = "";
 		affichageProjets(projets);
@@ -56,6 +61,10 @@ function affichageCategories(categories) {
 			const projetsFiltre = projets.filter(function (projet) {
 				return projet.categoryId === i+1;
 			});
+            for (let i = 0; i < buttonAll.length; i++) {
+                buttonAll[i].classList.remove("filtreSelect")
+            }
+            button.classList.add("filtreSelect")
             photoModale = false
 			sectionGallery.innerHTML = "";
 			affichageProjets(projetsFiltre);
@@ -69,6 +78,9 @@ function affichageCategories(categories) {
         option.dataset.id = categorieID
         selectCategories.appendChild(option);
     }
+
+    // Déclaration d'un élément qui référence tout les boutons créés
+    const buttonAll = document.querySelectorAll(".filtre button")
 }
 
 // Affichage des differents projets en fonction des filtres (pour la modale et la page d'accueil)
@@ -266,7 +278,7 @@ function MasquageModale(ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubm
     modale.classList.add("inactive")
 
     // Remise à zéro de la prévisualisation
-    ajoutPhotoImage.src = ""
+    ajoutPhotoImage.src = "#"
     ajoutPhotoImage.classList.add("inactive")
     ajoutPhotoContainer.classList.remove("inactive")
     formImageValid = false
@@ -317,7 +329,7 @@ function AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage, er
             erreur.classList.remove("inactive")
 
             // Remise à zéro de la prévisualisation
-            ajoutPhotoImage.src = ""
+            ajoutPhotoImage.src = "#"
             ajoutPhotoImage.classList.add("inactive")
             ajoutPhotoContainer.classList.remove("inactive")
 
@@ -331,7 +343,7 @@ function AffichageImagePrevisu(fichier, ajoutPhotoContainer, ajoutPhotoImage, er
         erreur.classList.remove("inactive")
 
         // Remise à zéro de la prévisualisation
-        ajoutPhotoImage.src = ""
+        ajoutPhotoImage.src = "#"
         ajoutPhotoImage.classList.add("inactive")
         ajoutPhotoContainer.classList.remove("inactive")
 

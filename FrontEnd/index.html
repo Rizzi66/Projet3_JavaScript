@@ -12,7 +12,7 @@
 	integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
 	crossorigin="anonymous" referrerpolicy="no-referrer">
 	<link rel="stylesheet" href="./assets/css/style.css">
-	<script type="module" src="./assets/js/script.js" defer></script>
+	<script type="module" src="./assets/js/script.js"></script>
 </head>
 <body>
 <div id="bandeau" class="bandeau inactive">
@@ -36,12 +36,12 @@
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
 			</figure>
-			<article>
+			<div>
 				<h2>Designer d'espace</h2>
 				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
 				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
 				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
-			</article>
+			</div>
 		</section>
 		<section id="portfolio">
 			<div id="titreProjets">
@@ -97,11 +97,11 @@
 					<input class="inactive" type="file" name="file" id="file" accept="image/png, image/jpeg" required>
 					<p>jpg, png : 4mo max</p>
 				</div>
-				<img class="inactive" src="" alt="Prévisualisation de l'image…"/>
+				<img class="inactive" src="#" alt="Prévisualisation de l'image…">
 			</div>
 			<div class="erreur inactive"></div>
 			<label for="titre">Titre</label>
-			<input type="titre" name="titre" id="titre" maxlength="50" required>
+			<input type="text" name="titre" id="titre" maxlength="50" required>
 			<label for="categories">Catégorie</label>
 			<select name="categories" id="categories" data-test="example" class="categories"></select>
 			<div class="modaleContainer_validation nonValide" id="modaleForm_valider">
