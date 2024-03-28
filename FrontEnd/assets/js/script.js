@@ -20,6 +20,7 @@ let eventListenersActive = false
 let modalePart2Active = false
 let formImageValid = false
 let formTitreValid = false
+let ajoutPhotoReset = false
 
 // Lancement des fonctions de démarrage
 affichageCategories(categories)
@@ -248,7 +249,7 @@ function AjoutEventListenerModale() {
     // Envoie du formulaire AjoutPhoto
     modaleForm.addEventListener("submit", async (event) => {
         event.preventDefault()
-        AjouterProjet(modaleRetour, modaleForm)
+        AjouterProjet(modaleRetour, modaleForm, ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit)
     })
 }
 
@@ -275,7 +276,10 @@ function affichageAjoutPhoto(modaleRetour, modaleForm) {
 // Masquage de la modale
 function MasquageModale(ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit) {
     // Masquage de la modale
-    modale.classList.add("inactive")
+    if (ajoutPhotoReset === false) {
+        modale.classList.add("inactive")
+    }
+    ajoutPhotoReset = false
 
     // Remise à zéro de la prévisualisation
     ajoutPhotoImage.src = "#"
@@ -363,7 +367,7 @@ function GrisageSubmit(modaleSubmit) {
 }
 
 // Ajout d'un nouveau projet via un POST HTTP
-async function AjouterProjet(modaleRetour, modaleForm) {
+async function AjouterProjet(modaleRetour, modaleForm, ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit) {
     // Récupération des différents éléments
     const formFile = modaleForm.file
     const formTitre = modaleForm.titre
@@ -392,9 +396,9 @@ async function AjouterProjet(modaleRetour, modaleForm) {
         body: formData,
     })
 
-    // Récupération des données "Projets" via l'API
-    projetsJSON = await fetch("http://localhost:5678/api/works");
-    projets = await projetsJSON.json();
+    // Ajout de la nouvelle donnée dans la const projets
+    const data = await reponse.json()
+    projets.push(data)
 
     // Rechargement des projets
     photoModale = true
@@ -405,6 +409,8 @@ async function AjouterProjet(modaleRetour, modaleForm) {
     // Retour à la page précédente de la modale
     modalePart2Active = false
     affichageAjoutPhoto(modaleRetour, modaleForm)
+    ajoutPhotoReset = true
+    MasquageModale(ajoutPhotoContainer, ajoutPhotoImage, erreur, modaleSubmit)
 }
 
 async function SupprimerProjet(id) {
@@ -421,9 +427,12 @@ async function SupprimerProjet(id) {
         headers: formHeader
     })
 
-    // Récupération des données "Projets" via l'API
-    projetsJSON = await fetch("http://localhost:5678/api/works");
-    projets = await projetsJSON.json();
+    // Suppression du "projet" dans la const projets
+    let i = 0
+    while (projets[i].id !== id) {
+        i++
+    }
+    projets.splice(i, 1)
 
     // Rechargement des projets
     photoModale = true
